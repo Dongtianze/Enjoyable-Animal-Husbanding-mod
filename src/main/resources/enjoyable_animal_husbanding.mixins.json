@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.brodong.enjoyable_animal_husbanding.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "enjoyable_animal_husbanding.refmap.json",
+  "mixins": [
+    "AnimalMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
