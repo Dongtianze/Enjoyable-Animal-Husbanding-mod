@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "enjoyable_animal_husbanding.refmap.json",
   "mixins": [
-    "AnimalMixin"
+    "AnimalMixin",
+    "BreedGoalMixin"
   ],
   "client": [
   ],
