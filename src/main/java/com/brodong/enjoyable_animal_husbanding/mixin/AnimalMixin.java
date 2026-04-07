@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,6 +36,7 @@ public abstract class AnimalMixin implements GenderAccessor {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void yourmodid$initGender(EntityType<? extends Animal> type, Level level, CallbackInfo ci) {
         this.gender = RANDOM.nextBoolean() ? Gender.Male : Gender.Female;
+        LOGGER.info("{}",gender);
     }
 
     // 4. 实现接口的 Getter/Setter
@@ -50,21 +52,17 @@ public abstract class AnimalMixin implements GenderAccessor {
         this.gender = gender;
     }
 
-    // 5. 【核心优雅逻辑】在 canMate 执行前注入性别判断
-    //    不覆盖原版代码，仅在性别相同时取消交配
     @Inject(method = "canMate", at = @At("HEAD"), cancellable = true)
-    private void yourmodid$checkGenderBeforeMate(Animal p_27569_, CallbackInfoReturnable<Boolean> cir) {
-        // 安全检查：确保双方都实现了 GenderAccessor
+    private void checkGenderBeforeMate(Animal p_27569_, CallbackInfoReturnable<Boolean> cir) {
         if (p_27569_ instanceof GenderAccessor partnerAccessor) {
             Gender myGender = this.getGender();
             Gender partnerGender = partnerAccessor.getGender();
 
-            // 性别相同 → 直接返回 false，取消交配
+            // 性别相同直接返回 false，取消交配
             if (myGender == partnerGender) {
-                LOGGER.info("unable to breed for same gender.");
                 cir.setReturnValue(false);
             }
         }
-        // 性别不同 → 不做处理，继续执行原版 canMate 逻辑
+        // 性别不同不做处理，继续执行原版 canMate 逻辑
     }
 }
