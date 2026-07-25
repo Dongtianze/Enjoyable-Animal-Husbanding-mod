@@ -4,6 +4,8 @@ import com.brodong.enjoyable_ranching.Gender;
 import com.brodong.enjoyable_ranching.GenderHelper;
 import com.brodong.enjoyable_ranching.SatietyHelper;
 import com.brodong.enjoyable_ranching.block.FeedingTroughBlock;
+import com.brodong.enjoyable_ranching.entity.Tameable;
+import com.brodong.enjoyable_ranching.entity.TameableHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -42,6 +44,10 @@ public class GrazingHandler {
             if (!pos.closerThan(animalPos, TROUGH_SEARCH_RANGE)) continue;
             if (FeedingTroughBlock.consumeFeed(animal.level(), pos, animal)) {
                 SatietyHelper.fillSatiety(animal);
+                // 从饲槽取食后尝试驯化（找最近的玩家认主）
+                if (Tameable.isTameable(animal)) {
+                    TameableHelper.tryTameFromTrough(animal);
+                }
                 return true;
             }
         }

@@ -4,6 +4,8 @@ import com.brodong.enjoyable_ranching.EnjoyableRanching;
 import com.brodong.enjoyable_ranching.Gender;
 import com.brodong.enjoyable_ranching.GenderHelper;
 import com.brodong.enjoyable_ranching.SatietyHelper;
+import com.brodong.enjoyable_ranching.entity.Tameable;
+import com.brodong.enjoyable_ranching.entity.TameableHelper;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -40,6 +42,10 @@ public class EntityEvents {
                 && !chicken.getPersistentData().contains("enjoyable_ranching:egg_timer")) {
             chicken.getPersistentData().putInt("enjoyable_ranching:egg_timer",
                     chicken.getRandom().nextInt(1200) + 1200);
+        }
+
+        if (Tameable.isTameable(animal) && !animal.getPersistentData().contains("enjoyable_ranching:tamed")) {
+            TameableHelper.setTamed(animal, false);
         }
     }
 
